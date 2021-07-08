@@ -45,7 +45,18 @@ window.addEventListener('load', (event) => {
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
       // TODO: write some code here
+      if(checkTwoCards()) {
+        console.log(memoryGame.pickedCards)
+      }
+      if(!card.classList.contains('blocked')) {
+        card.classList.toggle('turned')
+        memoryGame.pickedCards.push(card)
+      }
       console.log(`Card clicked: ${card}`);
     });
   });
 });
+
+function checkTwoCards() {
+  return memoryGame.pickedCards.length === 2
+}
