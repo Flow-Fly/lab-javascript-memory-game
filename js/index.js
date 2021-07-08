@@ -26,8 +26,10 @@ const cards = [
 ];
 
 const memoryGame = new MemoryGame(cards);
-
+const pairsClicked = document.getElementById('pairs-clicked')
+const pairsGuessed = document.getElementById('pairs-guessed')
 window.addEventListener('load', (event) => {
+  memoryGame.shuffleCards()
   let html = '';
   memoryGame.cards.forEach((pic) => {
     html += `
@@ -44,19 +46,52 @@ window.addEventListener('load', (event) => {
   // Bind the click event of each element to a function
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
-      // TODO: write some code here
-      if(checkTwoCards()) {
-        console.log(memoryGame.pickedCards)
-      }
-      if(!card.classList.contains('blocked')) {
+
+      if(!card.classList.contains('blocked') && memoryGame.pickedCards.length < 2) {
         card.classList.toggle('turned')
         memoryGame.pickedCards.push(card)
       }
-      console.log(`Card clicked: ${card}`);
-    });
-  });
-});
+      if (checkTwoCards()) {
+        let card1 = memoryGame.pickedCards[0].dataset.cardName
+        let card2 = memoryGame.pickedCards[1].dataset.cardName
+        if (memoryGame.checkIfPair(card1, card2)) {
+          lockCards()
+        } else {
+          returnCards()
+        }
+      }
+      if (memoryGame.checkIfFinished()) {
+        setTimeout(() => {
+          alert('You wooooooon')
+          memoryGame.shuffleCards()
+        },500)
+      }
+    })
+  })
+})
 
 function checkTwoCards() {
-  return memoryGame.pickedCards.length === 2
+  return memoryGame.pickedCards.length === 2;
+}
+
+function lockCards() {
+  let locked = document.querySelectorAll('.turned')
+  locked.forEach(card => {
+    card.classList.add('blocked')
+  })
+
+  pairsClicked.textContent = memoryGame.pairsClicked
+  pairsGuessed.textContent = memoryGame.pairsGuessed
+  memoryGame.pickedCards = []
+}
+
+function returnCards() {
+  setTimeout(() => {
+    let turn = document.querySelectorAll('.turned:not(.blocked)')
+    turn.forEach(card => {
+      card.classList.toggle('turned')
+  })
+  pairsClicked.textContent = memoryGame.pairsClicked
+  memoryGame.pickedCards = []
+  },1000)
 }
