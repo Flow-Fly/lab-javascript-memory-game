@@ -88,3 +88,24 @@ p {
   font-size: 20px;
   text-align: center;
 }
+
+.hidden {
+  visibility: hidden;
+}
+
+.restart {
+  position:absolute;
+  z-index: 30;
+  width: 33%;
+  height: 33%;
+  transform: translateX(100%);
+  top: 75%;
+  background-color: rgb(185, 185, 185);
+  border: 1px solid rgb(88, 88, 88);
+  border-radius: 20px;
+}
+
+#restart {
+  color:rgba(215, 40, 40, 0.9);
+  cursor: pointer;
+}
